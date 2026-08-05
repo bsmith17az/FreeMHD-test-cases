@@ -1,2 +1,5 @@
 **/polyMesh
 log.*
+**/dynamicCode
+**/postProcessing
+**/processors*
