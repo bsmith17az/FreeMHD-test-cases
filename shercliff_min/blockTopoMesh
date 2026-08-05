@@ -1,0 +1,19 @@
+#!/bin/bash
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        #  run functions
+#------------------------------------------------------------------------------
+
+#remove previous data and logs
+rm -r processor*
+rm -r postProcessing
+rm log*
+rm runLog*
+
+# run blockMeshDict
+runApplication blockMesh 2>&1 
+# run topoSetDict
+runApplication topoSet 2>&1 
+
+
+echo End
+
+#------------------------------------------------------------------------------

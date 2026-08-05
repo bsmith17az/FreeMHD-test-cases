@@ -1,0 +1,35 @@
+#!/bin/bash
+#cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        #  run functions
+#------------------------------------------------------------------------------
+
+#remove previous data and logs
+rm -r processor*
+rm -r postProcessing
+rm log.c*
+rm log.s*
+rm runLog*
+
+#split mesh into multipe regions
+runApplication splitMeshRegions -cellZonesOnly -overwrite -fileHandler collated
+
+#for each region, change initial and boundary conditions according to changeDictionaryDict
+for region in $(foamListRegions)
+do
+ runApplication -s $region changeDictionary -region $region -fileHandler collated
+done
+
+#set non-spatially-uniform initial conditions in the liquid region according to setExprFieldsDict 
+setExprFields -region liquid -fileHandler collated
+
+#set non-spatially-uniform initial conditions in the solid region according to setExprFieldsDict
+setExprFields -region solidWalls -fileHandler collated
+
+#set non-spatially-uniform initial conditions in the solid region according to setExprFieldsDict
+setExprFields -region insulator -fileHandler collated
+
+#decompose the mesh into multiple processors according to decomposeParDict
+decomposePar -allRegions -force -fileHandler collated
+
+
+#------------------------------------------------------------------------------
