@@ -43,14 +43,18 @@ outletUxB
     const volScalarField& Phimesh 	= mesh.lookupObject<volScalarField>("potE");
     
     //get patch internal variable and delta
-    const vectorField B     = Bmesh.boundaryField()[id].patchInternalField();
-    const vectorField U     = Umesh.boundaryField()[id].patchInternalField();
-    const scalarField phi   = Phimesh.boundaryField()[id].patchInternalField();
+    tmp<vectorField> tB = Bmesh.boundaryField()[id].patchInternalField();
+    tmp<vectorField> tU = Umesh.boundaryField()[id].patchInternalField();
+    tmp<scalarField> tphi = Phimesh.boundaryField()[id].patchInternalField();
+    const vectorField& B = tB();
+    const vectorField& U = tU();
+    const scalarField& phi = tphi();   
     const scalarField delta = patch().deltaCoeffs();
 
     
     scalarField result(patch().size(), Zero);
-    vectorField nf = patch().nf();
+    tmp<vectorField> tmp_nf = patch().nf();
+    vectorField nf = tmp_nf();
     
     forAll(result, i)
     {
