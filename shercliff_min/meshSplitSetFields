@@ -4,11 +4,7 @@
 #------------------------------------------------------------------------------
 
 #remove previous data and logs
-rm -r processor*
-rm -r postProcessing
-rm log.c*
-rm log.s*
-rm runLog*
+rm -rf processor* postProcessing log* runLog*
 
 #split mesh into multipe regions
 runApplication splitMeshRegions -cellZonesOnly -overwrite -fileHandler collated

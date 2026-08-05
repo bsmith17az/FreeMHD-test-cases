@@ -3,6 +3,6 @@
 #------------------------------------------------------------------------------
 
 #run the simulation
-srun -n 96 epotMultiRegionInterFoam -parallel 2>&1 | tee ./runLog
+srun -n 4 epotMultiRegionInterFoam -parallel 2>&1 | tee ./runLog
 
 #------------------------------------------------------------------------------
