@@ -3,10 +3,7 @@
 #------------------------------------------------------------------------------
 
 #remove previous data and logs
-rm -r processor*
-rm -r postProcessing
-rm log*
-rm runLog*
+rm -rf processor* postProcessing log* runLog*
 
 # run blockMeshDict
 runApplication blockMesh 2>&1 
