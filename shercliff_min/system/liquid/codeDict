@@ -37,20 +37,24 @@ outletUxB
     const fvMesh& mesh 	= patch().boundaryMesh().mesh();
     const label id 		= patch().index();
    
-   //get mesh variable
+    //get mesh variable
     const volVectorField& Bmesh 	= mesh.lookupObject<volVectorField>("B");
     const volVectorField& Umesh 	= mesh.lookupObject<volVectorField>("U");
     const volScalarField& Phimesh 	= mesh.lookupObject<volScalarField>("potE");
     
-    //get patch internal varialbe and delta
-    const vectorField B      = Bmesh.boundaryField().boundaryInternalField()[id];
-    const vectorField U      = Umesh.boundaryField().boundaryInternalField()[id];
-    const scalarField phi    = Phimesh.boundaryField().boundaryInternalField()[id];
-    const scalarField delta  = patch().deltaCoeffs();
+    //get patch internal variable and delta
+    tmp<vectorField> tB = Bmesh.boundaryField()[id].patchInternalField();
+    tmp<vectorField> tU = Umesh.boundaryField()[id].patchInternalField();
+    tmp<scalarField> tphi = Phimesh.boundaryField()[id].patchInternalField();
+    const vectorField& B = tB();
+    const vectorField& U = tU();
+    const scalarField& phi = tphi();   
+    const scalarField delta = patch().deltaCoeffs();
 
     
     scalarField result(patch().size(), Zero);
-    vectorField nf = patch().nf();
+    tmp<vectorField> tmp_nf = patch().nf();
+    vectorField nf = tmp_nf();
     
     forAll(result, i)
     {
